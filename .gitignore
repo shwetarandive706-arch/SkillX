@@ -1,0 +1,7 @@
+git statusnode_modules/
+.next/
+.env
+.env.local
+.env.*.local
+*.log
+node_modules
