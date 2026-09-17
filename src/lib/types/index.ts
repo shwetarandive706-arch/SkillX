@@ -75,6 +75,38 @@ export interface CandidateSkillProof {
   lastAssessedAt?: string;
 }
 
+export interface StudentCareerProfile {
+  studentName: string;
+  education: string;
+  currentSkills: string[];
+  interests: string[];
+  careerGoals: string;
+  experienceLevel: 'Beginner' | 'Intermediate' | 'Advanced';
+  targetRole: string;
+  updatedAt?: string;
+}
+
+export const INTEREST_OPTIONS = [
+  'Web Development',
+  'App Development',
+  'Artificial Intelligence',
+  'Data Science',
+  'Cybersecurity',
+  'Cloud Computing',
+  'UI/UX Design',
+];
+
+export const TARGET_CAREER_ROLES = [
+  'Full Stack Developer',
+  'Frontend Developer',
+  'Backend Developer',
+  'Data Analyst',
+  'AI/ML Engineer',
+  'Cybersecurity Analyst',
+  'Cloud Engineer',
+  'UI/UX Designer',
+];
+
 export interface Candidate {
   id: string;
   isDemoData: true;
@@ -89,6 +121,7 @@ export interface Candidate {
   overallProofScore: number;
   skills: CandidateSkillProof[];
   recentAssessments: AssessmentAttempt[];
+  careerProfile?: StudentCareerProfile;
 }
 
 export interface SkillRequirement {
@@ -130,4 +163,25 @@ export interface CandidateJobMatch {
   overallProofScore: number;
   matchedAt: string;
   rankExplanation?: string;
+}
+
+export interface CareerRecommendation {
+  roleTitle: string;
+  category: string;
+  matchPercentage: number;
+  matchingSkills: string[];
+  missingSkills: string[];
+  recommendationReason: string;
+  roadmapTopics: string[];
+  isTargetRole: boolean;
+}
+
+export interface CareerRoleBenchmark {
+  roleTitle: string;
+  category: string;
+  relatedInterests: string[];
+  requiredSkills: string[];
+  recommendedSkills: string[];
+  suggestedRoadmap: string[];
+  overview: string;
 }

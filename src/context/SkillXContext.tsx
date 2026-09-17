@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Candidate, RecruiterJobDescription, Skill, Assessment, Evidence } from '@/lib/types';
+import { Candidate, RecruiterJobDescription, Skill, Assessment, Evidence, StudentCareerProfile } from '@/lib/types';
 import { INITIAL_MOCK_CANDIDATES } from '@/lib/data/mockCandidates';
 import { INITIAL_MOCK_JOBS } from '@/lib/data/mockJobs';
 import { INITIAL_MOCK_SKILLS } from '@/lib/data/mockSkills';
@@ -21,6 +21,7 @@ interface SkillXContextType {
   updateAssessmentScore: (candidateId: string, skillId: string, scorePct: number) => void;
   addEvidenceToSkill: (candidateId: string, skillId: string, evidenceData: Omit<Evidence, 'id' | 'verifiedAt'>) => void;
   addSkillClaim: (candidateId: string, skillId: string, claimedLevel: 'Junior' | 'Mid' | 'Senior' | 'Expert') => void;
+  updateStudentProfile: (candidateId: string, profile: StudentCareerProfile) => void;
   createJobPosting: (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>) => string;
   resetDemoData: () => void;
   isLoaded: boolean;
@@ -234,6 +235,24 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
   };
 
+  // Function: Update Student Career Profile
+  const updateStudentProfile = (candidateId: string, profile: StudentCareerProfile) => {
+    setCandidates((prevCandidates) =>
+      prevCandidates.map((cand) => {
+        if (cand.id !== candidateId) return cand;
+
+        return {
+          ...cand,
+          name: profile.studentName || cand.name,
+          careerProfile: {
+            ...profile,
+            updatedAt: new Date().toISOString(),
+          },
+        };
+      })
+    );
+  };
+
   // Function: Create dynamic Job Posting
   const createJobPosting = (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>): string => {
     const newId = `job-${Date.now()}`;
@@ -272,6 +291,7 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         updateAssessmentScore,
         addEvidenceToSkill,
         addSkillClaim,
+        updateStudentProfile,
         createJobPosting,
         resetDemoData,
         isLoaded,

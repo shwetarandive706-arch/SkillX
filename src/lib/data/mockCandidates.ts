@@ -13,6 +13,16 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
     linkedinUrl: 'https://linkedin.com/in/alexchen-demo',
     portfolioUrl: 'https://alexchen.dev',
     overallProofScore: 88,
+    careerProfile: {
+      studentName: 'Alex Chen',
+      education: 'B.Tech Computer Science & Engineering',
+      currentSkills: ['Next.js (App Router)', 'React.js', 'TypeScript', 'Node.js', 'System Design'],
+      interests: ['Web Development', 'Artificial Intelligence', 'Cloud Computing'],
+      careerGoals: 'Build high-performance distributed web applications and lead cloud & AI integration architecture.',
+      experienceLevel: 'Advanced',
+      targetRole: 'Full Stack Developer',
+      updatedAt: '2026-09-15T10:30:00Z',
+    },
     recentAssessments: [
       {
         id: 'att-01',
@@ -222,6 +232,16 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
     location: 'Austin, TX (Hybrid)',
     githubUsername: 'sjenkins-ui',
     overallProofScore: 65,
+    careerProfile: {
+      studentName: 'Sarah Jenkins',
+      education: 'B.S. Information Technology',
+      currentSkills: ['React.js', 'Next.js (App Router)', 'TypeScript'],
+      interests: ['Web Development', 'UI/UX Design'],
+      careerGoals: 'Specialize in accessible design systems and modern frontend component libraries.',
+      experienceLevel: 'Intermediate',
+      targetRole: 'Frontend Developer',
+      updatedAt: '2026-08-12T00:00:00Z',
+    },
     recentAssessments: [
       {
         id: 'att-sj-01',
@@ -313,6 +333,16 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
     location: 'Seattle, WA (Remote)',
     githubUsername: 'mvance-unverified',
     overallProofScore: 0,
+    careerProfile: {
+      studentName: 'Marcus Vance',
+      education: 'B.Tech Software Engineering',
+      currentSkills: [],
+      interests: ['Cloud Computing', 'Cybersecurity', 'Data Science'],
+      careerGoals: 'Transition into enterprise cloud engineering and security architecture.',
+      experienceLevel: 'Beginner',
+      targetRole: 'Cloud Engineer',
+      updatedAt: '2026-09-17T00:00:00Z',
+    },
     recentAssessments: [],
     skills: [
       {

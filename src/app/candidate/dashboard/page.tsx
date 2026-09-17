@@ -15,7 +15,7 @@ import { AddEvidenceModal } from '@/components/candidate/AddEvidenceModal';
 import { AddSkillModal } from '@/components/candidate/AddSkillModal';
 import { CandidateSkillProof } from '@/lib/types';
 import { cn } from '@/lib/utils/utils';
-import { ShieldCheck, Plus, ExternalLink, ArrowRight, Sparkles, FileCode } from 'lucide-react';
+import { ShieldCheck, Plus, ArrowRight, Sparkles, FileCode, Compass } from 'lucide-react';
 
 export default function CandidateDashboardPage() {
   const { activeCandidate } = useSkillX();
@@ -40,30 +40,44 @@ export default function CandidateDashboardPage() {
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold text-white">{activeCandidate.name}</h1>
                 <Badge variant="demo" className="text-[10px]">DEMO CANDIDATE</Badge>
+                {activeCandidate.careerProfile?.targetRole && (
+                  <Badge variant="gold" className="text-[10px]">
+                    Goal: {activeCandidate.careerProfile.targetRole}
+                  </Badge>
+                )}
               </div>
               <p className="text-sm text-slate-300 font-medium">{activeCandidate.title}</p>
               <p className="text-xs text-slate-400 mt-1 max-w-xl line-clamp-2">{activeCandidate.bio}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-secondary/40 border border-border/80 p-4 rounded-xl shrink-0">
+          <div className="flex items-center gap-3 bg-secondary/40 border border-border/80 p-4 rounded-xl shrink-0">
             <div className="text-right">
               <span className="text-[10px] text-muted-foreground uppercase font-mono tracking-wider block">Verified Proof Score</span>
               <ProofScoreBadge score={activeCandidate.overallProofScore} size="lg" showConfidence={true} />
             </div>
 
-            <Link
-              href="/candidate/portfolio"
-              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'flex items-center gap-1.5 text-xs')}
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              Public Portfolio
-            </Link>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/candidate/career-guidance"
+                className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'flex items-center gap-1.5 text-xs')}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Get Career Guidance
+              </Link>
+              <Link
+                href="/candidate/career-profile"
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'flex items-center gap-1.5 text-xs')}
+              >
+                <Compass className="h-3.5 w-3.5" />
+                Student Profile
+              </Link>
+            </div>
           </div>
         </div>
       </Card>
 
-      {/* Grid: Skill Matrix Chart + Recent Assessment Logs */}
+      {/* Grid: Skill Matrix Chart + Recent Assessment & Career Guidance Logs */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Skill Matrix Radar / Bar */}
         <Card className="lg:col-span-2 border-border/80 bg-card/80 p-6 space-y-4">
@@ -82,44 +96,62 @@ export default function CandidateDashboardPage() {
           <SkillRadarChart skills={activeCandidate.skills} />
         </Card>
 
-        {/* Right Column: Assessment Engine Action Box */}
-        <Card className="border-indigo-500/30 bg-gradient-to-b from-indigo-950/40 to-card p-6 space-y-4">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
-              <Sparkles className="h-5 w-5" />
+        {/* Right Column: AI Career Guidance & Assessment Engine Action Box */}
+        <div className="space-y-6">
+          <Card className="border-indigo-500/40 bg-gradient-to-b from-indigo-950/50 to-card p-6 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-indigo-600/30 text-indigo-400">
+                <Compass className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">AI Career Guidance (ED-02)</h3>
+                <p className="text-xs text-slate-300">Discover target roles & skill gap roadmaps.</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-base font-bold text-white">Boost Proof Score</h3>
-              <p className="text-xs text-slate-300">Take 5-minute interactive code verification challenges.</p>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Match your verified skills and interests against benchmark roles like Full Stack, AI/ML, and Cloud Engineering.
+            </p>
+
+            <Link
+              href="/candidate/career-guidance"
+              className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-10 flex items-center px-4')}
+            >
+              <span>Explore Career Guidance Engine</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Card>
+
+          <Card className="border-border/80 bg-card/90 p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Boost Proof Score</h3>
+                <p className="text-xs text-slate-300">Take 5-minute interactive code challenges.</p>
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-2 pt-2">
-            <Link
-              href="/candidate/assess/skill-nextjs"
-              className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-11 flex items-center px-4')}
-            >
-              <span>Next.js App Router Challenge</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="space-y-2 pt-1">
+              <Link
+                href="/candidate/assess/skill-nextjs"
+                className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
+              >
+                <span>Next.js App Router Challenge</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
 
-            <Link
-              href="/candidate/assess/skill-react"
-              className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-11 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
-            >
-              <span>React.js State Architecture</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-
-            <Link
-              href="/candidate/assess/skill-typescript"
-              className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-11 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
-            >
-              <span>TypeScript Type Engine Challenge</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </Card>
+              <Link
+                href="/candidate/assess/skill-react"
+                className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
+              >
+                <span>React.js State Architecture</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </Card>
+        </div>
       </div>
 
       {/* Verified Skill Cards List */}
