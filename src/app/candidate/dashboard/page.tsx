@@ -15,7 +15,7 @@ import { AddEvidenceModal } from '@/components/candidate/AddEvidenceModal';
 import { AddSkillModal } from '@/components/candidate/AddSkillModal';
 import { CandidateSkillProof } from '@/lib/types';
 import { cn } from '@/lib/utils/utils';
-import { ShieldCheck, Plus, ArrowRight, Sparkles, FileCode, Compass } from 'lucide-react';
+import { ShieldCheck, Plus, ArrowRight, Sparkles, FileCode, Compass, BookOpen } from 'lucide-react';
 
 export default function CandidateDashboardPage() {
   const { activeCandidate } = useSkillX();
@@ -113,13 +113,25 @@ export default function CandidateDashboardPage() {
               Match your verified skills and interests against benchmark roles like Full Stack, AI/ML, and Cloud Engineering.
             </p>
 
-            <Link
-              href="/candidate/career-guidance"
-              className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-10 flex items-center px-4')}
-            >
-              <span>Explore Career Guidance Engine</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-col gap-2 pt-1">
+              <Link
+                href="/candidate/career-guidance"
+                className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-10 flex items-center px-4')}
+              >
+                <span>Explore Career Guidance Engine</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/candidate/learning-roadmap"
+                className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/40 hover:bg-indigo-950/50 flex items-center px-4')}
+              >
+                <span className="flex items-center gap-1.5 text-indigo-300">
+                  <BookOpen className="h-3.5 w-3.5" />
+                  My Learning Roadmap
+                </span>
+                <ArrowRight className="h-4 w-4 text-indigo-400" />
+              </Link>
+            </div>
           </Card>
 
           <Card className="border-border/80 bg-card/90 p-6 space-y-4">

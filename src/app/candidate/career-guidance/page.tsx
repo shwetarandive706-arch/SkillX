@@ -299,10 +299,10 @@ export default function CareerGuidancePage() {
                 </Button>
 
                 <Link
-                  href={`/candidate/assess/skill-nextjs`}
-                  className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'text-xs flex items-center gap-1')}
+                  href={`/candidate/learning-roadmap?role=${encodeURIComponent(rec.roleTitle)}`}
+                  className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'text-xs flex items-center gap-1')}
                 >
-                  Verify Skill Proof
+                  Build My Learning Roadmap
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </CardFooter>
@@ -434,6 +434,17 @@ export default function CareerGuidancePage() {
                   <span className="text-slate-200 font-medium leading-snug">{step}</span>
                 </div>
               ))}
+            </div>
+
+            <div className="pt-3 flex justify-end">
+              <Link
+                href={`/candidate/learning-roadmap?role=${encodeURIComponent(selectedBenchmark.roleTitle)}`}
+                className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'text-xs flex items-center gap-1.5')}
+              >
+                <BookOpen className="h-4 w-4" />
+                Build My Learning Roadmap for {selectedBenchmark.roleTitle}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           </div>
         </Card>

@@ -185,3 +185,29 @@ export interface CareerRoleBenchmark {
   suggestedRoadmap: string[];
   overview: string;
 }
+
+export interface MarketTrendInsight {
+  roleTitle: string;
+  demandIndicator: string;
+  demandLevel: 'High' | 'Very High' | 'Critical';
+  importantSkills: string[];
+  emergingSkills: string[];
+  growthOutlook: string;
+  salaryRange: string;
+  learningTopics: string[];
+  isDemoData: true;
+}
+
+export interface RoadmapTask {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+export interface RoadmapMilestoneItem {
+  id: string;
+  title: string;
+  estimatedEffort: string;
+  description: string;
+  tasks: RoadmapTask[];
+}

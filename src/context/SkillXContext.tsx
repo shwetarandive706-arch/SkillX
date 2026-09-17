@@ -22,6 +22,8 @@ interface SkillXContextType {
   addEvidenceToSkill: (candidateId: string, skillId: string, evidenceData: Omit<Evidence, 'id' | 'verifiedAt'>) => void;
   addSkillClaim: (candidateId: string, skillId: string, claimedLevel: 'Junior' | 'Mid' | 'Senior' | 'Expert') => void;
   updateStudentProfile: (candidateId: string, profile: StudentCareerProfile) => void;
+  completedTaskIds: Record<string, boolean>;
+  toggleRoadmapTask: (taskId: string) => void;
   createJobPosting: (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>) => string;
   resetDemoData: () => void;
   isLoaded: boolean;
@@ -38,6 +40,11 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [assessments] = useState<Record<string, Assessment>>(INITIAL_MOCK_ASSESSMENTS);
   const [activeCandidateId, setActiveCandidateId] = useState<string>('cand-alex-chen');
   const [activeRole, setActiveRole] = useState<'candidate' | 'recruiter'>('candidate');
+  const [completedTaskIds, setCompletedTaskIds] = useState<Record<string, boolean>>({
+    'task-fs-1-1': true,
+    'task-fs-1-2': true,
+    'task-fs-2-1': true,
+  });
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   // Load from local storage on mount
@@ -50,6 +57,7 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (parsed.jobs) setJobs(parsed.jobs);
         if (parsed.activeCandidateId) setActiveCandidateId(parsed.activeCandidateId);
         if (parsed.activeRole) setActiveRole(parsed.activeRole);
+        if (parsed.completedTaskIds) setCompletedTaskIds(parsed.completedTaskIds);
       }
     } catch (e) {
       console.error('Failed to parse localStorage for SkillX state:', e);
@@ -69,13 +77,14 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             jobs,
             activeCandidateId,
             activeRole,
+            completedTaskIds,
           })
         );
       } catch (e) {
         console.error('Failed to save SkillX state to localStorage:', e);
       }
     }
-  }, [candidates, jobs, activeCandidateId, activeRole, isLoaded]);
+  }, [candidates, jobs, activeCandidateId, activeRole, completedTaskIds, isLoaded]);
 
   // Active candidate helper
   const activeCandidate =
@@ -253,6 +262,14 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
   };
 
+  // Function: Toggle Roadmap Task completion checkbox
+  const toggleRoadmapTask = (taskId: string) => {
+    setCompletedTaskIds((prev) => ({
+      ...prev,
+      [taskId]: !prev[taskId],
+    }));
+  };
+
   // Function: Create dynamic Job Posting
   const createJobPosting = (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>): string => {
     const newId = `job-${Date.now()}`;
@@ -273,6 +290,11 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setJobs(INITIAL_MOCK_JOBS);
     setActiveCandidateId('cand-alex-chen');
     setActiveRole('candidate');
+    setCompletedTaskIds({
+      'task-fs-1-1': true,
+      'task-fs-1-2': true,
+      'task-fs-2-1': true,
+    });
     localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
@@ -292,6 +314,8 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         addEvidenceToSkill,
         addSkillClaim,
         updateStudentProfile,
+        completedTaskIds,
+        toggleRoadmapTask,
         createJobPosting,
         resetDemoData,
         isLoaded,

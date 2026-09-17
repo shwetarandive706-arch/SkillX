@@ -7,15 +7,16 @@ import { useSkillX } from '@/context/SkillXContext';
 import { buttonVariants } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { cn } from '@/lib/utils/utils';
-import { Award, UserCheck, Briefcase, Sparkles, CheckCircle2, Compass } from 'lucide-react';
+import { Award, UserCheck, Briefcase, Sparkles, CheckCircle2, Compass, BookOpen } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { setActiveRole, candidates, activeCandidateId, setActiveCandidateId } = useSkillX();
 
-  const isCandidateRoute = pathname.startsWith('/candidate') && !pathname.includes('/career-');
+  const isCandidateRoute = pathname.startsWith('/candidate') && !pathname.includes('/career-') && !pathname.includes('/learning-');
   const isCareerGuidanceRoute = pathname.includes('/career-guidance');
   const isCareerProfileRoute = pathname.includes('/career-profile');
+  const isRoadmapRoute = pathname.includes('/learning-roadmap');
   const isRecruiterRoute = pathname.startsWith('/recruiter');
 
   return (
@@ -63,6 +64,19 @@ export const Navbar: React.FC = () => {
             >
               <Sparkles className="h-4 w-4 text-indigo-400" />
               AI Career Guidance
+            </Link>
+
+            <Link
+              href="/candidate/learning-roadmap"
+              onClick={() => setActiveRole('candidate')}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                isRoadmapRoute
+                  ? 'bg-secondary text-indigo-400 font-semibold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+              }`}
+            >
+              <BookOpen className="h-4 w-4 text-indigo-400" />
+              Learning Roadmap
             </Link>
 
             <Link
