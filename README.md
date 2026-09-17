@@ -1,62 +1,55 @@
-# SkillX — Verifiable Skill Proof Engine
+# SkillX — AI-Powered Career Guidance & Skill Verification Platform
 
-> **Hackathon Product Documentation & Architecture Overview**  
-> SkillX is a verifiable skill proof & talent matching platform that replaces unverified resume keyword claims with transparent, math-backed **Proof Scores (0–100)** calculated from real code artifacts, live practical assessments, and evidence consistency metrics.
-
----
-
-## 1. Project Overview
-In modern tech hiring, traditional resumes are bloated with self-reported keyword claims that recruiters cannot easily verify without lengthy interview cycles. SkillX bridges this trust gap by introducing **Verifiable Skill Proof Scores**. 
-
-Candidates connect GitHub repositories, deployed web applications, technical design RFCs, and complete practical coding challenges. Recruiters set job skill criteria with custom priority multipliers (Critical, Important, Nice-to-have) and match candidates based on objective evidence rather than resume keywords.
+> **Hackathon Product Documentation & Architecture Overview (ED-02 Problem Statement Alignment)**  
+> SkillX is an AI-assisted career guidance and proof-based hiring platform for students. It combines **AI Career Recommendations (ED-02)** with verifiable math-backed **Proof Scores (0–100)** calculated from real code artifacts, practical code assessments, market trend insights, interactive learning roadmaps, resume readiness audits, and technical interview preparation.
 
 ---
 
-## 2. Problem Statement
-* **Keyword Inflation:** 70%+ of software resumes contain self-reported skill claims without proof.
-* **Recruiter Fatigue:** Recruiters spend hours scanning text resumes and running preliminary screening calls just to filter out unverified claims.
-* **Candidate Frustration:** Talented developers with strong open-source codebases or practical skills often get filtered out by legacy Applicant Tracking Systems (ATS) searching for exact buzzwords.
+## 1. Project Overview & ED-02 Problem Statement
+Developing a comprehensive career guidance system for students based on:
+1. **Student Skills** (Verified proof scores & claimed competencies)
+2. **Areas of Interest & Career Goals** (Academic branch, target career roles, experience level)
+3. **Market Trends & Industry Demand** (Role demand outlook, salary benchmarks, emerging skill shifts)
+
+SkillX bridges the trust gap between student career preparation and hiring requirements by introducing verifiable skill proofs alongside personalized learning roadmaps.
 
 ---
 
-## 3. Solution
-SkillX introduces a **Verifiable Proof Score (0–100)** algorithm that combines:
-1. **Code Artifact Verification (0–40 pts):** Direct evidence from GitHub repositories, lines of code, test coverage, and live project deployments.
-2. **Interactive Skill Assessments (0–40 pts):** Timed practical challenges evaluating real code comprehension and problem solving.
-3. **Consistency & Recency Index (0–20 pts):** Activity frequency and multi-artifact verification bonuses.
+## 2. Platform Modules & Completed Phases
+
+### 🎓 Phase 1: Student Career Profile (`/candidate/career-profile`)
+* Captures student name, academic branch/degree, current skill tags, areas of interest, career goals, experience level, and target career role.
+* Provides instant profile completeness gauge and candidate context sync.
+
+### 🤖 Phase 2: Personalized AI Career Guidance (`/candidate/career-guidance`)
+* Deterministic career recommendation engine evaluating skill overlap, interest alignment, and benchmark expectations across 8 technical roles.
+* Generates match percentages, matching skills, skill gap missing items, and recommendation rationales.
+
+### 📈 Phase 3: Market Trends & Personalized Learning Roadmap (`/candidate/learning-roadmap`)
+* Illustrative demo market insights dataset for 8 technical roles (Demand rating, average salary ranges INR/USD, emerging skills, career growth outlook).
+* Role-based 4-stage milestone sequence (Foundational Syntax, Architecture & State Flow, Database & Infrastructure, SkillX Proof Verification).
+* Interactive task checklists with `localStorage` state synchronization.
+
+### 🎯 Phase 4: Career Readiness & Skill Gap Analysis (`/candidate/career-readiness`)
+* Comprehensive readiness score engine (40% Skill Completion + 25% Roadmap Progress + 20% Portfolio Readiness + 15% Profile Completion).
+* Skill Gap Comparison Matrix comparing required core role skills vs student claimed/verified skills (`Completed`, `In Progress`, `Not Started`).
+* Actionable priority-ranked recommendations linking directly to learning roadmaps, code tests, and portfolio updates.
+
+### 💼 Phase 5: Portfolio, Resume Audit & Interview Prep
+* **Portfolio Readiness (`/candidate/portfolio`):** Portfolio completeness index, project cards, tech stack badges, verified impact/results, GitHub links, and interactive Add/Edit project modals.
+* **Resume Readiness Audit (`/candidate/resume-readiness`):** 8-section resume checklist, section optimization suggestions, sample resume copy examples, and `localStorage` persistence.
+* **Interview Preparation Hub (`/candidate/interview-preparation`):** Role/Category/Difficulty filters, technical & behavioral questions, expandable sample answer guidance, interactive "Mark as Practiced" button, and progress tracking.
+
+### 🏢 Recruiter Portal & Skill Verification Engine
+* **Recruiter Dashboard (`/recruiter/dashboard`):** Active job match rules and candidate match leaderboards.
+* **Job Requirement Builder (`/recruiter/jobs/new`):** Weighted priority multipliers (Critical 1.8x, Important 1.2x, Nice to Have 0.6x).
+* **Ranked Candidate Match Leaderboard (`/recruiter/jobs/[id]/matches`):** Match percentage matrix filtered by threshold slider.
+* **Math Audit Modal (`/recruiter/candidate/[id]`):** Transparent line-by-line proof formula breakdown.
+* **5-Question Code Assessments (`/candidate/assess/[skillId]`):** Interactive timed coding tests that recalculate candidate proof scores live.
 
 ---
 
-## 4. Key Features
-* **Dual Portal Switcher:** Seamless context switching between Candidate and Recruiter views with real-time shared state.
-* **Live Session Data Sync:** Taking an assessment or attaching evidence as a candidate instantly recalculates Proof Scores and updates candidate rankings on recruiter leaderboards.
-* **Deterministic Math Audit Modal:** Transparent line-by-line breakdown of how every score is calculated.
-* **Job Requirement Builder & JD Parser Simulator:** Extract skill requirements automatically from job descriptions and configure weighted priority multipliers.
-* **Shareable Public Proof Portfolios:** Verified public candidate profile links with proof badges and GitHub commit metrics.
-
----
-
-## 5. Technology Stack
-* **Framework:** Next.js 14 (App Router)
-* **Language:** TypeScript (Strict mode)
-* **Styling:** Tailwind CSS, `shadcn/ui` design system primitives
-* **Icons & Animation:** Lucide React icons, CSS backdrop blur, framer-motion ready styling
-* **State Management:** React Context (`SkillXContext`) backed by `localStorage` persistence with reset capabilities
-
----
-
-## 6. Application Workflow
-```
-Candidate Flow:
-[Dashboard] ──> [Attach GitHub/Live Project Evidence] ──> [Take Interactive Skill Test] ──> [Instant Proof Score Update (0-100)] ──> [Shareable Public Portfolio]
-
-Recruiter Flow:
-[Job Requirement Builder] ──> [Set Min Proof Thresholds & Weights] ──> [Match Matrix Leaderboard] ──> [Audit Candidate Proof Trail] ──> [Shortlist Candidate]
-```
-
----
-
-## 7. Proof Score Explanation
+## 3. Proof Score Formula
 $$\text{Proof Score} = \text{Evidence Weight (0–40)} + \text{Assessment Weight (0–40)} + \text{Consistency Weight (0–20)}$$
 
 * **Confidence Levels:**
@@ -64,69 +57,44 @@ $$\text{Proof Score} = \text{Evidence Weight (0–40)} + \text{Assessment Weight
   * **Verified Silver:** Score $60–79$ (Moderate verification confidence)
   * **Self-Reported Baseline:** Score $< 60$ (Unverified baseline)
 
-> *Ethics Boundary:* SkillX Proof Scores are objective algorithmic indicators of artifact evidence strength. SkillX never claims automated lie detection or automated hiring decisions. Final decision-making authority remains 100% human.
+> *Ethics & Disclosure Disclaimer:* All readiness estimates, recommendations, and market trends are illustrative demo indicators calculated deterministically from local profile data. SkillX never claims automated truth verification or lie detection.
 
 ---
 
-## 8. Candidate Workflow
-1. Navigate to **Candidate Portal** (`/candidate/dashboard`).
-2. Review verified skill breakdown and overall Proof Score gauge.
-3. Click **"Add Evidence"** to submit a GitHub repository URL, test coverage metrics, or deployed web app link.
-4. Click **"Take Test"** to launch interactive skill challenges (`/candidate/assess/[skillId]`).
-5. Upon test submission, accuracy is evaluated instantly, updating the candidate's score live across all portals.
-6. Share verified public proof profile URL (`/candidate/portfolio`).
+## 4. Technology Stack
+* **Framework:** Next.js 14.2 (App Router, Client & Server Components)
+* **Language:** TypeScript (Strict mode)
+* **Styling:** Tailwind CSS, custom dark navy & indigo/purple design system
+* **Icons:** Lucide React icons
+* **State Management:** React Context (`SkillXContext`) backed by `localStorage` persistence
 
 ---
 
-## 9. Recruiter Workflow
-1. Navigate to **Recruiter Portal** (`/recruiter/dashboard`).
-2. Click **"Create Job Skill Rule"** (`/recruiter/jobs/new`) to set required skills, minimum proof thresholds, and priority weights (`Critical` 1.8x, `Important` 1.2x, `Nice to Have` 0.6x).
-3. View the **Ranked Candidate Leaderboard** (`/recruiter/jobs/[id]/matches`) sorted by weighted match percentage.
-4. Filter candidates using the match threshold slider.
-5. Click **"Audit Skill Proofs"** (`/recruiter/candidate/[id]`) to inspect line-by-line GitHub metrics, test attempts, and proof formulas before shortlisting.
+## 5. Local Setup Instructions
 
----
-
-## 10. Installation Instructions
 Ensure Node.js (v18.0.0 or higher) is installed on your machine.
 
 ```bash
-# Clone the repository
-git clone https://github.com/demo/skillx.git
-
-# Navigate to project directory
+# 1. Open project directory
 cd SkillX
 
-# Install dependencies
+# 2. Install dependencies
 npm install
-```
 
----
-
-## 11. How to Run the Project
-```bash
-# Run Development Server
+# 3. Run Development Server
 npm run dev
 
-# Run Production Build
+# 4. Build for Production
 npm run build
 
-# Start Production Server
+# 5. Start Production Build
 npm run start
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser to explore the hackathon MVP demo.
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 12. Known Limitations (Hackathon MVP Scope)
-* **Local Storage Persistence:** Uses browser `localStorage` for state persistence rather than a remote database (PostgreSQL/Supabase).
-* **Simulated External APIs:** GitHub repository metrics and JD skill extraction are simulated using realistic local mock data engines to prevent API rate limits during judge evaluations.
-* **Demo Data Labeling:** All mock candidates and job postings are explicitly tagged with `[Demo Data]` badges.
-
----
-
-## 13. Future Scope
-* **Live GitHub OAuth & Webhooks:** Automatic real-time repository indexing and commit pattern analysis.
-* **Production PostgreSQL/Prisma Backend:** Secure server-side database storage with row-level security.
-* **Verified Peer Endorsements:** Cryptographically signed peer code review attestations.
-* **Interactive Code Sandbox:** Live WebContainer-based code execution environment for candidate practical tests.
+## 6. Disclaimers & Hackathon MVP Notes
+* **Local Storage Persistence:** Uses browser `localStorage` for state persistence rather than a remote server database.
+* **Demo Data Labeling:** All mock candidates, jobs, and market insights are explicitly tagged with `[DEMO DATA]` badges.
