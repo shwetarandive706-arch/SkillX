@@ -107,6 +107,19 @@ export const TARGET_CAREER_ROLES = [
   'UI/UX Designer',
 ];
 
+export interface CandidateProject {
+  id: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  impactResults: string;
+  githubUrl?: string;
+  liveDemoUrl?: string;
+  verificationStatus: 'Verified' | 'In Review' | 'Unverified';
+  proofScoreContribution?: number;
+  isDemoData?: true;
+}
+
 export interface Candidate {
   id: string;
   isDemoData: true;
@@ -122,7 +135,31 @@ export interface Candidate {
   skills: CandidateSkillProof[];
   recentAssessments: AssessmentAttempt[];
   careerProfile?: StudentCareerProfile;
+  projects?: CandidateProject[];
 }
+
+export interface ResumeChecklistItem {
+  id: string;
+  sectionName: string;
+  title: string;
+  description: string;
+  completed: boolean;
+  isRequired: boolean;
+  improvementSuggestion: string;
+}
+
+export interface InterviewQuestion {
+  id: string;
+  roleTitle: string; // e.g. Frontend Developer, Backend Developer, Full Stack Developer, Data Analyst, AI/ML Engineer, Cybersecurity Analyst
+  category: 'Technical' | 'Behavioral' | 'HR';
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  topic: string;
+  question: string;
+  sampleAnswer: string;
+  answerGuidance: string;
+  isDemoData: true;
+}
+
 
 export interface SkillRequirement {
   skillId: string;
@@ -211,3 +248,44 @@ export interface RoadmapMilestoneItem {
   description: string;
   tasks: RoadmapTask[];
 }
+
+export type SkillGapStatus = 'Completed' | 'In Progress' | 'Not Started';
+
+export interface SkillGapItem {
+  skillName: string;
+  status: SkillGapStatus;
+  category: string;
+  proofScore?: number;
+  isRequired: boolean;
+  recommendedAction: string;
+}
+
+export interface ReadinessRecommendation {
+  id: string;
+  title: string;
+  description: string;
+  priority: 'High' | 'Medium' | 'Low';
+  actionLabel: string;
+  actionUrl: string;
+}
+
+export interface CareerReadinessAnalysis {
+  roleTitle: string;
+  overallReadinessPercentage: number;
+  skillCompletionPercentage: number;
+  roadmapCompletionPercentage: number;
+  portfolioReadinessPercentage: number;
+  resumeReadinessPercentage: number;
+  completedSkillsCount: number;
+  totalRequiredSkillsCount: number;
+  remainingSkillsCount: number;
+  skillsBreakdown: SkillGapItem[];
+  recommendations: ReadinessRecommendation[];
+  formulaDetails: {
+    skillWeight: number;
+    roadmapWeight: number;
+    portfolioWeight: number;
+    resumeWeight: number;
+  };
+}
+

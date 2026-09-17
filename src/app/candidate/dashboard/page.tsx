@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSkillX } from '@/context/SkillXContext';
+import { calculateCareerReadiness } from '@/lib/utils/careerReadiness';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { ProofScoreBadge } from '@/components/shared/ProofScoreBadge';
 import { EvidenceCard } from '@/components/shared/EvidenceCard';
 import { SkillRadarChart } from '@/components/candidate/SkillRadarChart';
@@ -15,13 +17,21 @@ import { AddEvidenceModal } from '@/components/candidate/AddEvidenceModal';
 import { AddSkillModal } from '@/components/candidate/AddSkillModal';
 import { CandidateSkillProof } from '@/lib/types';
 import { cn } from '@/lib/utils/utils';
-import { ShieldCheck, Plus, ArrowRight, Sparkles, FileCode, Compass, BookOpen } from 'lucide-react';
+import { ShieldCheck, Plus, ArrowRight, Sparkles, FileCode, Compass, BookOpen, Target, FolderGit2, FileText, HelpCircle } from 'lucide-react';
 
 export default function CandidateDashboardPage() {
-  const { activeCandidate } = useSkillX();
+  const {
+    activeCandidate,
+    completedTaskIds,
+    candidateProjects,
+    resumeChecklistState,
+    practicedQuestionIds,
+  } = useSkillX();
   const [selectedAuditSkill, setSelectedAuditSkill] = useState<CandidateSkillProof | null>(null);
   const [addEvidenceSkill, setAddEvidenceSkill] = useState<{ id: string; name: string } | null>(null);
   const [isAddSkillOpen, setIsAddSkillOpen] = useState<boolean>(false);
+
+  const readiness = calculateCareerReadiness(activeCandidate, completedTaskIds);
 
   return (
     <div className="space-y-8 pb-12">
@@ -96,8 +106,47 @@ export default function CandidateDashboardPage() {
           <SkillRadarChart skills={activeCandidate.skills} />
         </Card>
 
-        {/* Right Column: AI Career Guidance & Assessment Engine Action Box */}
+        {/* Right Column: Career Readiness, AI Guidance & Action Cards */}
         <div className="space-y-6">
+          {/* Career Readiness & Skill Gap Card */}
+          <Card className="border-indigo-500/40 bg-gradient-to-b from-card via-indigo-950/30 to-card p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-indigo-600/30 text-indigo-400">
+                  <Target className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Career Readiness</h3>
+                  <p className="text-xs text-slate-300">Skill gap & readiness index</p>
+                </div>
+              </div>
+              <span className="text-xl font-mono font-black text-indigo-400">{readiness.overallReadinessPercentage}%</span>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between text-[11px] text-slate-300">
+                <span>Goal: <strong className="text-white">{readiness.roleTitle}</strong></span>
+                <span>{readiness.completedSkillsCount}/{readiness.totalRequiredSkillsCount} Skills</span>
+              </div>
+              <Progress value={readiness.overallReadinessPercentage} className="h-2" />
+              <p className="text-[11px] text-slate-400 line-clamp-2">
+                {readiness.overallReadinessPercentage >= 75
+                  ? 'High readiness. Ready for technical recruiter matching.'
+                  : readiness.overallReadinessPercentage >= 50
+                  ? 'Moderate readiness. Complete learning roadmap tasks and code challenges to boost score.'
+                  : 'Foundational stage. Build skills via milestone roadmaps and proof assessments.'}
+              </p>
+            </div>
+
+            <Link
+              href={`/candidate/career-readiness?role=${encodeURIComponent(readiness.roleTitle)}`}
+              className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-10 flex items-center px-4')}
+            >
+              <span>View Skill Gap & Readiness</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Card>
+
           <Card className="border-indigo-500/40 bg-gradient-to-b from-indigo-950/50 to-card p-6 space-y-4">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-xl bg-indigo-600/30 text-indigo-400">
@@ -134,34 +183,94 @@ export default function CandidateDashboardPage() {
             </div>
           </Card>
 
-          <Card className="border-border/80 bg-card/90 p-6 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
-                <Sparkles className="h-5 w-5" />
+          {/* Portfolio Readiness Card */}
+          <Card className="border-indigo-500/40 bg-card/90 p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-indigo-600/30 text-indigo-400">
+                  <FolderGit2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Portfolio Readiness</h3>
+                  <p className="text-xs text-slate-300">Verified projects & evidence</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-white">Boost Proof Score</h3>
-                <p className="text-xs text-slate-300">Take 5-minute interactive code challenges.</p>
-              </div>
+              <span className="text-xl font-mono font-black text-indigo-400">
+                {candidateProjects.length} Projects
+              </span>
             </div>
 
-            <div className="space-y-2 pt-1">
-              <Link
-                href="/candidate/assess/skill-nextjs"
-                className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
-              >
-                <span>Next.js App Router Challenge</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Attach technical project claims and code artifact evidence to boost your public proof portfolio.
+            </p>
 
-              <Link
-                href="/candidate/assess/skill-react"
-                className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
-              >
-                <span>React.js State Architecture</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+            <Link
+              href="/candidate/portfolio"
+              className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/40 hover:bg-indigo-950/50 flex items-center px-4')}
+            >
+              <span>Manage Verified Portfolio</span>
+              <ArrowRight className="h-4 w-4 text-indigo-400" />
+            </Link>
+          </Card>
+
+          {/* Resume Readiness Card */}
+          <Card className="border-indigo-500/40 bg-card/90 p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-indigo-600/30 text-indigo-400">
+                  <FileText className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Resume Readiness</h3>
+                  <p className="text-xs text-slate-300">Section optimization audit</p>
+                </div>
+              </div>
+              <span className="text-xl font-mono font-black text-emerald-400">
+                {Math.round((Object.keys(resumeChecklistState).filter((k) => resumeChecklistState[k]).length / 8) * 100)}%
+              </span>
             </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Audit technical skills categorization, education credentials, and STAR project descriptions.
+            </p>
+
+            <Link
+              href="/candidate/resume-readiness"
+              className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-10 border-indigo-500/40 hover:bg-indigo-950/50 flex items-center px-4')}
+            >
+              <span>Audit Resume Checklist</span>
+              <ArrowRight className="h-4 w-4 text-indigo-400" />
+            </Link>
+          </Card>
+
+          {/* Interview Preparation Card */}
+          <Card className="border-indigo-500/40 bg-card/90 p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-indigo-600/30 text-indigo-400">
+                  <HelpCircle className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Interview Prep Hub</h3>
+                  <p className="text-xs text-slate-300">Technical & behavioral prompts</p>
+                </div>
+              </div>
+              <span className="text-xl font-mono font-black text-indigo-400">
+                {Object.keys(practicedQuestionIds).filter((k) => practicedQuestionIds[k]).length} Mastered
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Practice role-specific system design, React performance, SQL tuning, and behavioral STAR questions.
+            </p>
+
+            <Link
+              href="/candidate/interview-preparation"
+              className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-10 flex items-center px-4')}
+            >
+              <span>Open Interview Prep Hub</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </Card>
         </div>
       </div>

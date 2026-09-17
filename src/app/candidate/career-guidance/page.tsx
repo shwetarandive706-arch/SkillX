@@ -288,15 +288,13 @@ export default function CareerGuidancePage() {
                 </div>
               </CardContent>
 
-              <CardFooter className="p-4 border-t border-border/50 bg-secondary/20 flex items-center justify-between">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedRoleTitle(rec.roleTitle)}
-                  className="text-xs text-indigo-300 hover:text-white"
+              <CardFooter className="p-4 border-t border-border/50 bg-secondary/20 flex flex-wrap items-center justify-between gap-2">
+                <Link
+                  href={`/candidate/career-readiness?role=${encodeURIComponent(rec.roleTitle)}`}
+                  className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'text-xs border-indigo-500/40 text-indigo-300 hover:text-white')}
                 >
-                  Analyze Skill Gap
-                </Button>
+                  Analyze Career Readiness
+                </Link>
 
                 <Link
                   href={`/candidate/learning-roadmap?role=${encodeURIComponent(rec.roleTitle)}`}
@@ -436,7 +434,13 @@ export default function CareerGuidancePage() {
               ))}
             </div>
 
-            <div className="pt-3 flex justify-end">
+            <div className="pt-3 flex flex-wrap items-center justify-end gap-3">
+              <Link
+                href={`/candidate/career-readiness?role=${encodeURIComponent(selectedBenchmark.roleTitle)}`}
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'text-xs flex items-center gap-1.5 border-indigo-500/40 text-indigo-300 hover:text-white')}
+              >
+                Analyze Career Readiness
+              </Link>
               <Link
                 href={`/candidate/learning-roadmap?role=${encodeURIComponent(selectedBenchmark.roleTitle)}`}
                 className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'text-xs flex items-center gap-1.5')}

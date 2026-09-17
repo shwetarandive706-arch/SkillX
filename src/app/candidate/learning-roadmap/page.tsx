@@ -20,7 +20,6 @@ import {
   Sparkles,
   Target,
   GraduationCap,
-  ArrowRight,
   Clock,
   Layers,
   Award
@@ -294,20 +293,19 @@ function LearningRoadmapContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <Link
+              href={`/candidate/career-readiness?role=${encodeURIComponent(benchmark.roleTitle)}`}
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'text-xs border-indigo-500/40 text-indigo-300 hover:text-white')}
+            >
+              View Skill Gap Analysis
+            </Link>
             <Link
               href="/candidate/assess/skill-nextjs"
               className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'text-xs flex items-center gap-1.5')}
             >
               <Sparkles className="h-3.5 w-3.5" />
               Take Assessment
-            </Link>
-            <Link
-              href="/candidate/dashboard"
-              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'text-xs flex items-center gap-1.5')}
-            >
-              View Portfolio
-              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>

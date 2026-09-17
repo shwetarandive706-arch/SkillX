@@ -1,11 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Candidate, RecruiterJobDescription, Skill, Assessment, Evidence, StudentCareerProfile } from '@/lib/types';
+import { Candidate, RecruiterJobDescription, Skill, Assessment, Evidence, StudentCareerProfile, CandidateProject } from '@/lib/types';
 import { INITIAL_MOCK_CANDIDATES } from '@/lib/data/mockCandidates';
 import { INITIAL_MOCK_JOBS } from '@/lib/data/mockJobs';
 import { INITIAL_MOCK_SKILLS } from '@/lib/data/mockSkills';
 import { INITIAL_MOCK_ASSESSMENTS } from '@/lib/data/mockAssessments';
+import { DEMO_CANDIDATE_PROJECTS } from '@/lib/data/mockProjects';
 import { calculateProofScore } from '@/lib/utils/scoreCalculator';
 
 interface SkillXContextType {
@@ -24,6 +25,14 @@ interface SkillXContextType {
   updateStudentProfile: (candidateId: string, profile: StudentCareerProfile) => void;
   completedTaskIds: Record<string, boolean>;
   toggleRoadmapTask: (taskId: string) => void;
+  practicedQuestionIds: Record<string, boolean>;
+  togglePracticedQuestion: (questionId: string) => void;
+  candidateProjects: CandidateProject[];
+  addCandidateProject: (project: Omit<CandidateProject, 'id'>) => void;
+  updateCandidateProject: (project: CandidateProject) => void;
+  deleteCandidateProject: (projectId: string) => void;
+  resumeChecklistState: Record<string, boolean>;
+  toggleResumeCheckitem: (itemId: string) => void;
   createJobPosting: (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>) => string;
   resetDemoData: () => void;
   isLoaded: boolean;
@@ -45,6 +54,17 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     'task-fs-1-2': true,
     'task-fs-2-1': true,
   });
+  const [practicedQuestionIds, setPracticedQuestionIds] = useState<Record<string, boolean>>({
+    'q-fs-01': true,
+    'q-fe-01': true,
+  });
+  const [candidateProjects, setCandidateProjects] = useState<CandidateProject[]>(DEMO_CANDIDATE_PROJECTS);
+  const [resumeChecklistState, setResumeChecklistState] = useState<Record<string, boolean>>({
+    'res-skills': true,
+    'res-edu': true,
+    'res-projects': true,
+    'res-github': true,
+  });
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   // Load from local storage on mount
@@ -58,6 +78,9 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (parsed.activeCandidateId) setActiveCandidateId(parsed.activeCandidateId);
         if (parsed.activeRole) setActiveRole(parsed.activeRole);
         if (parsed.completedTaskIds) setCompletedTaskIds(parsed.completedTaskIds);
+        if (parsed.practicedQuestionIds) setPracticedQuestionIds(parsed.practicedQuestionIds);
+        if (parsed.candidateProjects) setCandidateProjects(parsed.candidateProjects);
+        if (parsed.resumeChecklistState) setResumeChecklistState(parsed.resumeChecklistState);
       }
     } catch (e) {
       console.error('Failed to parse localStorage for SkillX state:', e);
@@ -78,13 +101,26 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             activeCandidateId,
             activeRole,
             completedTaskIds,
+            practicedQuestionIds,
+            candidateProjects,
+            resumeChecklistState,
           })
         );
       } catch (e) {
         console.error('Failed to save SkillX state to localStorage:', e);
       }
     }
-  }, [candidates, jobs, activeCandidateId, activeRole, completedTaskIds, isLoaded]);
+  }, [
+    candidates,
+    jobs,
+    activeCandidateId,
+    activeRole,
+    completedTaskIds,
+    practicedQuestionIds,
+    candidateProjects,
+    resumeChecklistState,
+    isLoaded,
+  ]);
 
   // Active candidate helper
   const activeCandidate =
@@ -270,6 +306,40 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }));
   };
 
+  // Function: Toggle Interview Question practiced status
+  const togglePracticedQuestion = (questionId: string) => {
+    setPracticedQuestionIds((prev) => ({
+      ...prev,
+      [questionId]: !prev[questionId],
+    }));
+  };
+
+  // Function: Candidate Portfolio Project Management
+  const addCandidateProject = (project: Omit<CandidateProject, 'id'>) => {
+    const newProject: CandidateProject = {
+      ...project,
+      id: `proj-${Date.now()}`,
+      isDemoData: true,
+    };
+    setCandidateProjects((prev) => [newProject, ...prev]);
+  };
+
+  const updateCandidateProject = (project: CandidateProject) => {
+    setCandidateProjects((prev) => prev.map((p) => (p.id === project.id ? project : p)));
+  };
+
+  const deleteCandidateProject = (projectId: string) => {
+    setCandidateProjects((prev) => prev.filter((p) => p.id !== projectId));
+  };
+
+  // Function: Toggle Resume Checklist item
+  const toggleResumeCheckitem = (itemId: string) => {
+    setResumeChecklistState((prev) => ({
+      ...prev,
+      [itemId]: !prev[itemId],
+    }));
+  };
+
   // Function: Create dynamic Job Posting
   const createJobPosting = (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>): string => {
     const newId = `job-${Date.now()}`;
@@ -295,6 +365,17 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       'task-fs-1-2': true,
       'task-fs-2-1': true,
     });
+    setPracticedQuestionIds({
+      'q-fs-01': true,
+      'q-fe-01': true,
+    });
+    setCandidateProjects(DEMO_CANDIDATE_PROJECTS);
+    setResumeChecklistState({
+      'res-skills': true,
+      'res-edu': true,
+      'res-projects': true,
+      'res-github': true,
+    });
     localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
@@ -316,6 +397,14 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         updateStudentProfile,
         completedTaskIds,
         toggleRoadmapTask,
+        practicedQuestionIds,
+        togglePracticedQuestion,
+        candidateProjects,
+        addCandidateProject,
+        updateCandidateProject,
+        deleteCandidateProject,
+        resumeChecklistState,
+        toggleResumeCheckitem,
         createJobPosting,
         resetDemoData,
         isLoaded,
