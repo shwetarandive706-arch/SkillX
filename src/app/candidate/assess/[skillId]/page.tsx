@@ -48,6 +48,42 @@ export default function SkillAssessmentPage() {
         ],
         correctOptionIndex: 0,
         explanation: 'Non-blocking I/O execution, automated testing, and multi-tier caching maximize overall throughput.'
+      },
+      {
+        id: 'q3',
+        question: `What is the most effective approach to managing state and security in ${masterSkill ? masterSkill.name : 'application development'}?`,
+        options: [
+          'Enforce strict input sanitization, least-privilege permissions, and immutable state updates',
+          'Store secrets in public client-side JavaScript bundles',
+          'Ignore edge cases during error handling',
+          'Rely exclusively on third-party client plugins for security'
+        ],
+        correctOptionIndex: 0,
+        explanation: 'Input sanitization, least-privilege authorization, and state immutability prevent vulnerability vectors.'
+      },
+      {
+        id: 'q4',
+        question: `Why is automated unit and integration testing essential when scaling ${masterSkill ? masterSkill.name : 'codebases'}?`,
+        options: [
+          'Catches regressions early, documents software behavior, and enables confident refactoring',
+          'Doubles runtime execution speed of production servers',
+          'Replaces the need for code reviews entirely',
+          'Eliminates the need for database indexing'
+        ],
+        correctOptionIndex: 0,
+        explanation: 'Automated test suites catch regressions early and document expected system behavior.'
+      },
+      {
+        id: 'q5',
+        question: `What step is critical before deploying updates to production systems?`,
+        options: [
+          'Run automated CI validation suites, build checks, and staged rollout verification',
+          'Deploy directly from local developer branches without building',
+          'Remove all environment configuration variables',
+          'Turn off API rate limits'
+        ],
+        correctOptionIndex: 0,
+        explanation: 'Automated CI pipelines verify build integrity and regression safety prior to release.'
       }
     ]
   };

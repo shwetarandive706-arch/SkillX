@@ -129,4 +129,5 @@ export interface CandidateJobMatch {
   }[];
   overallProofScore: number;
   matchedAt: string;
+  rankExplanation?: string;
 }

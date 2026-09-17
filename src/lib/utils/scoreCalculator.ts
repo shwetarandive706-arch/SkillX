@@ -23,16 +23,21 @@ export function calculateProofScore(
   let assessmentWeight = 0;
   if (assessmentScorePct !== undefined) {
     assessmentWeight = Math.round((assessmentScorePct / 100) * 40);
-  } else {
-    // Default baseline if not assessed yet
+  } else if (evidence.length > 0) {
+    // Default baseline allocation if evidence exists
     assessmentWeight = 15;
+  } else {
+    assessmentWeight = 0;
   }
 
   // 3. Consistency / Recency Weight (Max 20 points)
-  let consistencyWeight = 10;
-  if (evidence.length >= 3) consistencyWeight += 5;
-  if (assessmentScorePct && assessmentScorePct >= 80) consistencyWeight += 5;
-  consistencyWeight = Math.min(20, consistencyWeight);
+  let consistencyWeight = 0;
+  if (evidence.length > 0 || assessmentScorePct !== undefined) {
+    consistencyWeight = 10;
+    if (evidence.length >= 3) consistencyWeight += 5;
+    if (assessmentScorePct && assessmentScorePct >= 80) consistencyWeight += 5;
+    consistencyWeight = Math.min(20, consistencyWeight);
+  }
 
   // Overall Score sum
   const overall = Math.min(100, Math.max(0, evidenceWeight + assessmentWeight + consistencyWeight));
@@ -94,6 +99,23 @@ export function calculateCandidateJobMatch(
   const rawMatchPct = totalPossibleWeight > 0 ? (weightedEarnedScore / totalPossibleWeight) * 100 : 50;
   const matchScore = Math.min(100, Math.round(rawMatchPct));
 
+  // Generate explicit data-driven rank explanation
+  const passedCriticalCount = skillBreakdown.filter((s) => s.weight === 'critical' && s.meetsRequirement).length;
+  const totalCriticalCount = skillBreakdown.filter((s) => s.weight === 'critical').length;
+  const totalEvidenceCount = candidate.skills.reduce((acc, s) => acc + (s.evidence ? s.evidence.length : 0), 0);
+  const totalAssessmentsCount = candidate.recentAssessments ? candidate.recentAssessments.length : 0;
+
+  let rankExplanation = '';
+  if (totalEvidenceCount === 0 && totalAssessmentsCount === 0) {
+    rankExplanation = `${candidate.name} claims proficiency, but has an Evidence Gap (0 verified GitHub artifacts, 0 assessments taken).`;
+  } else if (passedCriticalCount === totalCriticalCount && totalCriticalCount > 0) {
+    rankExplanation = `${candidate.name} exceeds all ${totalCriticalCount} critical job requirements with ${totalEvidenceCount} verified evidence items and strong assessment precision.`;
+  } else if (passedCriticalCount > 0) {
+    rankExplanation = `${candidate.name} meets ${passedCriticalCount} of ${totalCriticalCount} critical requirements, backed by ${totalEvidenceCount} verified project artifacts.`;
+  } else {
+    rankExplanation = `${candidate.name} has partial skill coverage (${matchScore}% match) with unverified gaps in key requirement areas.`;
+  }
+
   return {
     candidateId: candidate.id,
     candidateName: candidate.name,
@@ -104,5 +126,6 @@ export function calculateCandidateJobMatch(
     skillBreakdown,
     overallProofScore: candidate.overallProofScore,
     matchedAt: new Date().toISOString(),
+    rankExplanation,
   };
 }

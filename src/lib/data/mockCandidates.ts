@@ -221,20 +221,29 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
     avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
     location: 'Austin, TX (Hybrid)',
     githubUsername: 'sjenkins-ui',
-    overallProofScore: 82,
-    recentAssessments: [],
+    overallProofScore: 65,
+    recentAssessments: [
+      {
+        id: 'att-sj-01',
+        assessmentId: 'assess-react-01',
+        candidateId: 'cand-sarah-jenkins',
+        scorePercentage: 75,
+        completedAt: '2026-08-10T10:00:00Z',
+        passed: true,
+      }
+    ],
     skills: [
       {
         skillId: 'skill-react',
         skillName: 'React.js',
         category: 'Frontend',
-        claimedLevel: 'Expert',
+        claimedLevel: 'Senior',
         proofScore: {
-          overall: 88,
-          evidenceWeight: 36,
-          assessmentWeight: 36,
-          consistencyWeight: 16,
-          confidenceLevel: 'Verified Gold',
+          overall: 68,
+          evidenceWeight: 20,
+          assessmentWeight: 30,
+          consistencyWeight: 18,
+          confidenceLevel: 'Verified Silver',
         },
         evidence: [
           {
@@ -244,12 +253,12 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
             type: 'github_repo',
             url: 'https://github.com/sjenkins-ui/accessible-react-ui',
             summary: 'WCAG 2.1 AAA compliant component library built with Tailwind CSS and Radix UI.',
-            verificationLevel: 'high',
+            verificationLevel: 'medium',
             verifiedAt: '2026-08-12T00:00:00Z',
             metrics: {
-              stars: 620,
-              commitsCount: 410,
-              testCoverage: 96,
+              stars: 45,
+              commitsCount: 60,
+              testCoverage: 80,
             }
           }
         ]
@@ -260,9 +269,9 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
         category: 'Frontend',
         claimedLevel: 'Mid',
         proofScore: {
-          overall: 70,
-          evidenceWeight: 25,
-          assessmentWeight: 30,
+          overall: 62,
+          evidenceWeight: 15,
+          assessmentWeight: 32,
           consistencyWeight: 15,
           confidenceLevel: 'Verified Silver',
         },
@@ -273,7 +282,7 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
             title: 'Corporate Blog & Documentation Portal',
             type: 'live_project',
             summary: 'Static MDX documentation platform built on Next.js 14.',
-            verificationLevel: 'medium',
+            verificationLevel: 'low',
             verifiedAt: '2026-06-18T00:00:00Z',
           }
         ]
@@ -284,11 +293,11 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
         category: 'Frontend',
         claimedLevel: 'Senior',
         proofScore: {
-          overall: 80,
-          evidenceWeight: 30,
-          assessmentWeight: 35,
+          overall: 60,
+          evidenceWeight: 15,
+          assessmentWeight: 30,
           consistencyWeight: 15,
-          confidenceLevel: 'Verified Gold',
+          confidenceLevel: 'Verified Silver',
         },
         evidence: []
       }
@@ -298,93 +307,52 @@ export const INITIAL_MOCK_CANDIDATES: Candidate[] = [
     id: 'cand-marcus-vance',
     isDemoData: true,
     name: 'Marcus Vance',
-    title: 'Backend & Systems Architect',
-    bio: 'Distributed systems engineer specializing in high-load Go & Node.js backend services and PostgreSQL database tuning.',
+    title: 'Unverified Candidate (Evidence Gap Demo)',
+    bio: 'Self-reported Full Stack Engineer claiming Expert proficiency across Next.js, React, and TypeScript without linked proof.',
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
     location: 'Seattle, WA (Remote)',
-    githubUsername: 'mvance-systems',
-    overallProofScore: 84,
+    githubUsername: 'mvance-unverified',
+    overallProofScore: 0,
     recentAssessments: [],
     skills: [
-      {
-        skillId: 'skill-nodejs',
-        skillName: 'Node.js',
-        category: 'Backend',
-        claimedLevel: 'Expert',
-        proofScore: {
-          overall: 91,
-          evidenceWeight: 38,
-          assessmentWeight: 38,
-          consistencyWeight: 15,
-          confidenceLevel: 'Verified Gold',
-        },
-        evidence: [
-          {
-            id: 'ev-mv-01',
-            skillId: 'skill-nodejs',
-            title: 'gRPC Microservice Gateway',
-            type: 'github_repo',
-            url: 'https://github.com/mvance-systems/grpc-gateway-node',
-            summary: 'Zero-latency protocol buffer converter and authentication proxy.',
-            verificationLevel: 'high',
-            verifiedAt: '2026-08-30T00:00:00Z',
-            metrics: {
-              stars: 310,
-              commitsCount: 280,
-              linesOfCode: 15000,
-              testCoverage: 91,
-            }
-          }
-        ]
-      },
-      {
-        skillId: 'skill-postgres',
-        skillName: 'PostgreSQL',
-        category: 'Database',
-        claimedLevel: 'Senior',
-        proofScore: {
-          overall: 89,
-          evidenceWeight: 36,
-          assessmentWeight: 38,
-          consistencyWeight: 15,
-          confidenceLevel: 'Verified Gold',
-        },
-        evidence: [
-          {
-            id: 'ev-mv-02',
-            skillId: 'skill-postgres',
-            title: 'Database Sharding Framework',
-            type: 'github_repo',
-            summary: 'PostgreSQL connection pool routing middleware for dynamic tenant database sharding.',
-            verificationLevel: 'high',
-            verifiedAt: '2026-07-22T00:00:00Z',
-          }
-        ]
-      },
-      {
-        skillId: 'skill-sysdesign',
-        skillName: 'System Design',
-        category: 'System Design',
-        claimedLevel: 'Senior',
-        proofScore: {
-          overall: 88,
-          evidenceWeight: 36,
-          assessmentWeight: 37,
-          consistencyWeight: 15,
-          confidenceLevel: 'Verified Gold',
-        },
-        evidence: []
-      },
       {
         skillId: 'skill-nextjs',
         skillName: 'Next.js (App Router)',
         category: 'Frontend',
-        claimedLevel: 'Junior',
+        claimedLevel: 'Expert',
         proofScore: {
-          overall: 55,
-          evidenceWeight: 20,
-          assessmentWeight: 20,
-          consistencyWeight: 15,
+          overall: 0,
+          evidenceWeight: 0,
+          assessmentWeight: 0,
+          consistencyWeight: 0,
+          confidenceLevel: 'Self-Reported Baseline',
+        },
+        evidence: []
+      },
+      {
+        skillId: 'skill-react',
+        skillName: 'React.js',
+        category: 'Frontend',
+        claimedLevel: 'Expert',
+        proofScore: {
+          overall: 0,
+          evidenceWeight: 0,
+          assessmentWeight: 0,
+          consistencyWeight: 0,
+          confidenceLevel: 'Self-Reported Baseline',
+        },
+        evidence: []
+      },
+      {
+        skillId: 'skill-typescript',
+        skillName: 'TypeScript',
+        category: 'Frontend',
+        claimedLevel: 'Senior',
+        proofScore: {
+          overall: 0,
+          evidenceWeight: 0,
+          assessmentWeight: 0,
+          consistencyWeight: 0,
           confidenceLevel: 'Self-Reported Baseline',
         },
         evidence: []

@@ -16,12 +16,25 @@ export const ProofScoreBadge: React.FC<ProofScoreBadgeProps> = ({
   showConfidence = false,
 }) => {
   const overall = typeof score === 'number' ? score : score.overall;
-  const confidence = typeof score === 'object' ? score.confidenceLevel : overall >= 80 ? 'Verified Gold' : overall >= 60 ? 'Verified Silver' : 'Self-Reported Baseline';
+  const isGap = overall <= 0 || (typeof score === 'object' && score.evidenceWeight === 0 && score.assessmentWeight === 0);
+
+  const confidence = typeof score === 'object'
+    ? score.confidenceLevel
+    : isGap
+    ? 'Evidence Gap: High'
+    : overall >= 80
+    ? 'Verified Gold'
+    : overall >= 60
+    ? 'Verified Silver'
+    : 'Self-Reported Baseline';
 
   let colorClass = 'from-emerald-500 to-teal-400 text-emerald-400 border-emerald-500/30';
   let bgGlow = 'shadow-emerald-500/20';
 
-  if (overall < 60) {
+  if (isGap) {
+    colorClass = 'from-rose-500 to-amber-500 text-rose-400 border-rose-500/30';
+    bgGlow = 'shadow-rose-500/20';
+  } else if (overall < 60) {
     colorClass = 'from-amber-500 to-orange-400 text-amber-400 border-amber-500/30';
     bgGlow = 'shadow-amber-500/20';
   } else if (overall < 75) {
@@ -43,14 +56,14 @@ export const ProofScoreBadge: React.FC<ProofScoreBadgeProps> = ({
       >
         <ShieldCheck className={`${size === 'xl' ? 'h-7 w-7' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4'} ${colorClass.split(' ')[2]}`} />
         <span className={`bg-gradient-to-r ${colorClass} bg-clip-text text-transparent font-mono`}>
-          {overall}
+          {isGap ? 'Not Computable' : overall}
         </span>
-        <span className="text-[10px] text-muted-foreground font-sans font-normal opacity-70">/100</span>
+        {!isGap && <span className="text-[10px] text-muted-foreground font-sans font-normal opacity-70">/100</span>}
       </div>
 
       {showConfidence && (
         <Badge
-          variant={confidence === 'Verified Gold' ? 'gold' : confidence === 'Verified Silver' ? 'silver' : 'outline'}
+          variant={confidence === 'Verified Gold' ? 'gold' : confidence === 'Verified Silver' ? 'silver' : isGap ? 'destructive' : 'outline'}
           className="text-xs flex items-center gap-1"
         >
           <Award className="h-3 w-3" />

@@ -7,7 +7,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { ProofScoreBadge } from '@/components/shared/ProofScoreBadge';
 import { CandidateJobMatch } from '@/lib/types';
 import { cn } from '@/lib/utils/utils';
-import { ShieldCheck, CheckCircle2, XCircle, MapPin, ExternalLink } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, XCircle, MapPin, ExternalLink, Sparkles } from 'lucide-react';
 
 interface CandidateMatchCardProps {
   match: CandidateJobMatch;
@@ -95,11 +95,30 @@ export const CandidateMatchCard: React.FC<CandidateMatchCardProps> = ({ match, r
           </div>
         </div>
 
+        {/* Explicit Data-Driven Rank Explanation Banner */}
+        <div className="mt-4 p-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/30 text-xs text-slate-200 flex items-start gap-2.5">
+          <Sparkles className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <span className="font-bold text-white block">
+              Ranked #{rank} because:
+            </span>
+            <p className="text-slate-300 leading-relaxed">
+              {match.rankExplanation || `${match.candidateName} achieved a ${match.matchScore}% weighted job match based on verifiable evidence metrics.`}
+            </p>
+          </div>
+        </div>
+
         {/* Skill Requirement Breakdown Pills */}
-        <div className="mt-5 pt-4 border-t border-border/50">
-          <span className="text-xs font-semibold text-slate-400 block mb-2.5">
-            Verified Skill Breakdown Against Job Requirements:
-          </span>
+        <div className="mt-4 pt-4 border-t border-border/50">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+            <span className="text-xs font-semibold text-slate-400 block">
+              Verified Skill Breakdown Against Job Requirements:
+            </span>
+
+            {/* Micro-Challenge CTA Button */}
+            <ChallengeCTA candidateName={match.candidateName} />
+          </div>
+
           <div className="flex flex-wrap gap-2">
             {match.skillBreakdown.map((sb) => (
               <div
@@ -130,3 +149,22 @@ export const CandidateMatchCard: React.FC<CandidateMatchCardProps> = ({ match, r
     </Card>
   );
 };
+
+function ChallengeCTA({ candidateName }: { candidateName: string }) {
+  const [sent, setSent] = React.useState(false);
+
+  return (
+    <button
+      onClick={() => setSent(true)}
+      disabled={sent}
+      className={`text-xs px-2.5 py-1 rounded-md border font-semibold flex items-center gap-1 transition-all ${
+        sent
+          ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300'
+          : 'border-indigo-500/40 bg-indigo-950/30 text-indigo-300 hover:bg-indigo-900/50'
+      }`}
+    >
+      <Sparkles className="h-3 w-3" />
+      {sent ? `30-Min Challenge Sent to ${candidateName.split(' ')[0]}!` : `Suggest 30-Min Challenge`}
+    </button>
+  );
+}

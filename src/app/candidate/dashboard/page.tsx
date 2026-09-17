@@ -12,6 +12,7 @@ import { EvidenceCard } from '@/components/shared/EvidenceCard';
 import { SkillRadarChart } from '@/components/candidate/SkillRadarChart';
 import { ProofAuditModal } from '@/components/shared/ProofAuditModal';
 import { AddEvidenceModal } from '@/components/candidate/AddEvidenceModal';
+import { AddSkillModal } from '@/components/candidate/AddSkillModal';
 import { CandidateSkillProof } from '@/lib/types';
 import { cn } from '@/lib/utils/utils';
 import { ShieldCheck, Plus, ExternalLink, ArrowRight, Sparkles, FileCode } from 'lucide-react';
@@ -20,6 +21,7 @@ export default function CandidateDashboardPage() {
   const { activeCandidate } = useSkillX();
   const [selectedAuditSkill, setSelectedAuditSkill] = useState<CandidateSkillProof | null>(null);
   const [addEvidenceSkill, setAddEvidenceSkill] = useState<{ id: string; name: string } | null>(null);
+  const [isAddSkillOpen, setIsAddSkillOpen] = useState<boolean>(false);
 
   return (
     <div className="space-y-8 pb-12">
@@ -122,14 +124,26 @@ export default function CandidateDashboardPage() {
 
       {/* Verified Skill Cards List */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <FileCode className="h-5 w-5 text-blue-400" />
-            Skill Proof Breakdown & Evidence Linkage
-          </h2>
-          <span className="text-xs text-muted-foreground">
-            {activeCandidate.skills.length} Skills Verified
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <FileCode className="h-5 w-5 text-blue-400" />
+              Skill Proof Breakdown & Evidence Linkage
+            </h2>
+            <span className="text-xs text-muted-foreground">
+              {activeCandidate.skills.length} Skills Verified
+            </span>
+          </div>
+
+          <Button
+            variant="gradient"
+            size="sm"
+            onClick={() => setIsAddSkillOpen(true)}
+            className="text-xs flex items-center gap-1.5 shrink-0"
+          >
+            <Plus className="h-4 w-4" />
+            Add Skill Claim
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -225,6 +239,12 @@ export default function CandidateDashboardPage() {
           skillName={addEvidenceSkill.name}
         />
       )}
+
+      {/* Add Skill Claim Modal */}
+      <AddSkillModal
+        open={isAddSkillOpen}
+        onOpenChange={setIsAddSkillOpen}
+      />
     </div>
   );
 }

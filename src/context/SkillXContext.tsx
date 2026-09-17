@@ -20,6 +20,7 @@ interface SkillXContextType {
   setActiveRole: (role: 'candidate' | 'recruiter') => void;
   updateAssessmentScore: (candidateId: string, skillId: string, scorePct: number) => void;
   addEvidenceToSkill: (candidateId: string, skillId: string, evidenceData: Omit<Evidence, 'id' | 'verifiedAt'>) => void;
+  addSkillClaim: (candidateId: string, skillId: string, claimedLevel: 'Junior' | 'Mid' | 'Senior' | 'Expert') => void;
   createJobPosting: (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>) => string;
   resetDemoData: () => void;
   isLoaded: boolean;
@@ -186,6 +187,53 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
   };
 
+  // Function: Add new Skill Claim
+  const addSkillClaim = (
+    candidateId: string,
+    skillId: string,
+    claimedLevel: 'Junior' | 'Mid' | 'Senior' | 'Expert'
+  ) => {
+    setCandidates((prevCandidates) =>
+      prevCandidates.map((cand) => {
+        if (cand.id !== candidateId) return cand;
+
+        const existingIndex = cand.skills.findIndex((s) => s.skillId === skillId);
+        if (existingIndex >= 0) {
+          const updatedSkills = [...cand.skills];
+          updatedSkills[existingIndex] = {
+            ...updatedSkills[existingIndex],
+            claimedLevel,
+          };
+          return { ...cand, skills: updatedSkills };
+        }
+
+        const masterSkill = skills.find((s) => s.id === skillId);
+        const skillName = masterSkill ? masterSkill.name : 'Technical Skill';
+        const category = masterSkill ? masterSkill.category : 'Frontend';
+        const initialScore = calculateProofScore([]);
+
+        const newSkillProof = {
+          skillId,
+          skillName,
+          category,
+          claimedLevel,
+          proofScore: initialScore,
+          evidence: [],
+        };
+
+        const updatedSkills = [...cand.skills, newSkillProof];
+        const totalOverallSum = updatedSkills.reduce((sum, s) => sum + s.proofScore.overall, 0);
+        const newOverall = Math.round(totalOverallSum / (updatedSkills.length || 1));
+
+        return {
+          ...cand,
+          skills: updatedSkills,
+          overallProofScore: newOverall,
+        };
+      })
+    );
+  };
+
   // Function: Create dynamic Job Posting
   const createJobPosting = (jobData: Omit<RecruiterJobDescription, 'id' | 'isDemoData' | 'createdAt'>): string => {
     const newId = `job-${Date.now()}`;
@@ -223,6 +271,7 @@ export const SkillXProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setActiveRole,
         updateAssessmentScore,
         addEvidenceToSkill,
+        addSkillClaim,
         createJobPosting,
         resetDemoData,
         isLoaded,
