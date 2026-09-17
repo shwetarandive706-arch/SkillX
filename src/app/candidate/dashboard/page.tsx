@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSkillX } from '@/context/SkillXContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProofScoreBadge } from '@/components/shared/ProofScoreBadge';
 import { EvidenceCard } from '@/components/shared/EvidenceCard';
@@ -13,6 +13,7 @@ import { SkillRadarChart } from '@/components/candidate/SkillRadarChart';
 import { ProofAuditModal } from '@/components/shared/ProofAuditModal';
 import { AddEvidenceModal } from '@/components/candidate/AddEvidenceModal';
 import { CandidateSkillProof } from '@/lib/types';
+import { cn } from '@/lib/utils/utils';
 import { ShieldCheck, Plus, ExternalLink, ArrowRight, Sparkles, FileCode } from 'lucide-react';
 
 export default function CandidateDashboardPage() {
@@ -49,11 +50,12 @@ export default function CandidateDashboardPage() {
               <ProofScoreBadge score={activeCandidate.overallProofScore} size="lg" showConfidence={true} />
             </div>
 
-            <Link href="/candidate/portfolio">
-              <Button variant="outline" size="sm" className="flex items-center gap-1.5 text-xs">
-                <ExternalLink className="h-3.5 w-3.5" />
-                Public Portfolio
-              </Button>
+            <Link
+              href="/candidate/portfolio"
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'flex items-center gap-1.5 text-xs')}
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              Public Portfolio
             </Link>
           </div>
         </div>
@@ -91,25 +93,28 @@ export default function CandidateDashboardPage() {
           </div>
 
           <div className="space-y-2 pt-2">
-            <Link href="/candidate/assess/skill-nextjs">
-              <Button variant="gradient" className="w-full justify-between text-xs h-11">
-                <span>Next.js App Router Challenge</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+            <Link
+              href="/candidate/assess/skill-nextjs"
+              className={cn(buttonVariants({ variant: 'gradient' }), 'w-full justify-between text-xs h-11 flex items-center px-4')}
+            >
+              <span>Next.js App Router Challenge</span>
+              <ArrowRight className="h-4 w-4" />
             </Link>
 
-            <Link href="/candidate/assess/skill-react">
-              <Button variant="outline" className="w-full justify-between text-xs h-11 border-indigo-500/30 hover:bg-indigo-950/50">
-                <span>React.js State Architecture</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+            <Link
+              href="/candidate/assess/skill-react"
+              className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-11 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
+            >
+              <span>React.js State Architecture</span>
+              <ArrowRight className="h-4 w-4" />
             </Link>
 
-            <Link href="/candidate/assess/skill-typescript">
-              <Button variant="outline" className="w-full justify-between text-xs h-11 border-indigo-500/30 hover:bg-indigo-950/50">
-                <span>TypeScript Type Engine Challenge</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+            <Link
+              href="/candidate/assess/skill-typescript"
+              className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between text-xs h-11 border-indigo-500/30 hover:bg-indigo-950/50 flex items-center px-4')}
+            >
+              <span>TypeScript Type Engine Challenge</span>
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </Card>
@@ -190,10 +195,11 @@ export default function CandidateDashboardPage() {
                     Add Evidence
                   </Button>
 
-                  <Link href={`/candidate/assess/${skillItem.skillId}`}>
-                    <Button variant="default" size="sm" className="text-xs">
-                      Take Test
-                    </Button>
+                  <Link
+                    href={`/candidate/assess/${skillItem.skillId}`}
+                    className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'text-xs')}
+                  >
+                    Take Test
                   </Link>
                 </div>
               </CardFooter>

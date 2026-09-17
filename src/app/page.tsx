@@ -4,10 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSkillX } from '@/context/SkillXContext';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ProofScoreBadge } from '@/components/shared/ProofScoreBadge';
+import { cn } from '@/lib/utils/utils';
 import { ShieldCheck, UserCheck, Briefcase, FileCode, ArrowRight, Zap, Target } from 'lucide-react';
 
 export default function LandingPage() {
@@ -33,19 +34,23 @@ export default function LandingPage() {
 
         {/* Dual Portal CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <Link href="/candidate/dashboard" onClick={() => setActiveRole('candidate')}>
-            <Button variant="gradient" size="lg" className="w-full sm:w-auto h-14 px-8 text-base flex items-center gap-2">
-              <UserCheck className="h-5 w-5" />
-              Candidate Demo: Verify Skills
-              <ArrowRight className="h-5 w-5" />
-            </Button>
+          <Link
+            href="/candidate/dashboard"
+            onClick={() => setActiveRole('candidate')}
+            className={cn(buttonVariants({ variant: 'gradient', size: 'lg' }), 'w-full sm:w-auto h-14 px-8 text-base flex items-center gap-2')}
+          >
+            <UserCheck className="h-5 w-5" />
+            Candidate Demo: Verify Skills
+            <ArrowRight className="h-5 w-5" />
           </Link>
 
-          <Link href="/recruiter/dashboard" onClick={() => setActiveRole('recruiter')}>
-            <Button variant="outline" size="lg" className="w-full sm:w-auto h-14 px-8 text-base border-purple-500/40 hover:bg-purple-950/30 text-purple-200 flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-purple-400" />
-              Recruiter Demo: Match Verified Talent
-            </Button>
+          <Link
+            href="/recruiter/dashboard"
+            onClick={() => setActiveRole('recruiter')}
+            className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'w-full sm:w-auto h-14 px-8 text-base border-purple-500/40 hover:bg-purple-950/30 text-purple-200 flex items-center gap-2')}
+          >
+            <Briefcase className="h-5 w-5 text-purple-400" />
+            Recruiter Demo: Match Verified Talent
           </Link>
         </div>
       </div>
@@ -110,11 +115,12 @@ export default function LandingPage() {
               <ProofScoreBadge score={activeCandidate.overallProofScore} size="lg" showConfidence={true} />
             </div>
 
-            <Link href="/candidate/dashboard">
-              <Button variant="gradient" size="lg" className="flex items-center gap-2">
-                Explore Profile
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+            <Link
+              href="/candidate/dashboard"
+              className={cn(buttonVariants({ variant: 'gradient', size: 'lg' }), 'flex items-center gap-2')}
+            >
+              Explore Profile
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

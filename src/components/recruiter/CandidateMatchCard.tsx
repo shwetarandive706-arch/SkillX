@@ -3,9 +3,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { ProofScoreBadge } from '@/components/shared/ProofScoreBadge';
 import { CandidateJobMatch } from '@/lib/types';
+import { cn } from '@/lib/utils/utils';
 import { ShieldCheck, CheckCircle2, XCircle, MapPin, ExternalLink } from 'lucide-react';
 
 interface CandidateMatchCardProps {
@@ -77,17 +78,19 @@ export const CandidateMatchCard: React.FC<CandidateMatchCardProps> = ({ match, r
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row md:flex-col items-stretch gap-2 shrink-0">
-            <Link href={`/recruiter/candidate/${match.candidateId}`}>
-              <Button variant="gradient" size="sm" className="w-full flex items-center gap-1.5 text-xs">
-                <ShieldCheck className="h-4 w-4" />
-                Audit Skill Proofs
-              </Button>
+            <Link
+              href={`/recruiter/candidate/${match.candidateId}`}
+              className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'w-full flex items-center justify-center gap-1.5 text-xs')}
+            >
+              <ShieldCheck className="h-4 w-4" />
+              Audit Skill Proofs
             </Link>
-            <Link href={`/candidate/portfolio?id=${match.candidateId}`}>
-              <Button variant="outline" size="sm" className="w-full flex items-center gap-1.5 text-xs">
-                <ExternalLink className="h-3.5 w-3.5" />
-                Public Portfolio
-              </Button>
+            <Link
+              href={`/candidate/portfolio?id=${match.candidateId}`}
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-full flex items-center justify-center gap-1.5 text-xs')}
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              Public Portfolio
             </Link>
           </div>
         </div>

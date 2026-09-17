@@ -4,45 +4,65 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { useSkillX } from '@/context/SkillXContext';
 import { AssessmentRunner } from '@/components/candidate/AssessmentRunner';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils/utils';
 import Link from 'next/link';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { Assessment } from '@/lib/types';
 
 export default function SkillAssessmentPage() {
   const params = useParams();
   const skillId = (params?.skillId as string) || 'skill-nextjs';
-  const { assessments } = useSkillX();
+  const { assessments, skills } = useSkillX();
 
-  const assessment = assessments[skillId] || assessments['skill-nextjs'];
+  const masterSkill = skills.find((s) => s.id === skillId);
 
-  if (!assessment) {
-    return (
-      <div className="py-12 text-center max-w-md mx-auto space-y-4">
-        <Card className="p-8 space-y-4">
-          <AlertCircle className="h-12 w-12 text-amber-400 mx-auto" />
-          <h2 className="text-xl font-bold text-white">Assessment Not Found</h2>
-          <p className="text-xs text-muted-foreground">
-            No active challenge found for skill ID: {skillId}.
-          </p>
-          <Link href="/candidate/dashboard">
-            <Button variant="outline" className="w-full">
-              Back to Dashboard
-            </Button>
-          </Link>
-        </Card>
-      </div>
-    );
-  }
+  // Fallback assessment generator for any unmapped skill ID
+  const fallbackAssessment: Assessment = {
+    id: `assess-${skillId}`,
+    skillId: skillId,
+    skillName: masterSkill ? masterSkill.name : 'Technical Skill Verification',
+    durationMinutes: 5,
+    difficulty: 'Intermediate',
+    questions: [
+      {
+        id: 'q1',
+        question: `What is a primary architectural best practice when working with ${masterSkill ? masterSkill.name : 'modern software design'}?`,
+        options: [
+          'Maintain modular separation of concerns and write type-safe code',
+          'Bypass all input validation checks in production',
+          'Store mutable application state in global un-encapsulated variables',
+          'Disable error logging in production environments'
+        ],
+        correctOptionIndex: 0,
+        explanation: 'Modular design, input validation, and type safety are foundational architectural principles.'
+      },
+      {
+        id: 'q2',
+        question: `How do you optimize system performance and reliability for ${masterSkill ? masterSkill.name : 'distributed services'}?`,
+        options: [
+          'Utilize asynchronous non-blocking patterns, efficient caching, and test coverage',
+          'Execute synchronous blocking operations on the single thread',
+          'Avoid caching static assets',
+          'Increase server allocations without profiling bottlenecks'
+        ],
+        correctOptionIndex: 0,
+        explanation: 'Non-blocking I/O execution, automated testing, and multi-tier caching maximize overall throughput.'
+      }
+    ]
+  };
+
+  const assessment = assessments[skillId] || fallbackAssessment;
 
   return (
     <div className="space-y-6 py-4 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
-        <Link href="/candidate/dashboard">
-          <Button variant="ghost" size="sm" className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Skill Portfolio
-          </Button>
+        <Link
+          href="/candidate/dashboard"
+          className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'flex items-center gap-1.5 text-xs text-slate-400 hover:text-white')}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Skill Portfolio
         </Link>
       </div>
 

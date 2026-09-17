@@ -4,8 +4,9 @@ import React from 'react';
 import Link from 'next/link';
 import { useSkillX } from '@/context/SkillXContext';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils/utils';
 import { Briefcase, Plus, Users, Target, MapPin, ChevronRight } from 'lucide-react';
 
 export default function RecruiterDashboardPage() {
@@ -25,11 +26,12 @@ export default function RecruiterDashboardPage() {
           </p>
         </div>
 
-        <Link href="/recruiter/jobs/new">
-          <Button variant="gradient" size="lg" className="flex items-center gap-2">
-            <Plus className="h-5 w-5" />
-            Create Job Skill Rule
-          </Button>
+        <Link
+          href="/recruiter/jobs/new"
+          className={cn(buttonVariants({ variant: 'gradient', size: 'lg' }), 'flex items-center gap-2')}
+        >
+          <Plus className="h-5 w-5" />
+          Create Job Skill Rule
         </Link>
       </div>
 
@@ -98,12 +100,13 @@ export default function RecruiterDashboardPage() {
                 </div>
 
                 <div className="shrink-0">
-                  <Link href={`/recruiter/jobs/${job.id}/matches`}>
-                    <Button variant="gradient" size="lg" className="w-full sm:w-auto flex items-center gap-2">
-                      <Users className="h-4 w-4" />
-                      View Candidate Match Leaderboard
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
+                  <Link
+                    href={`/recruiter/jobs/${job.id}/matches`}
+                    className={cn(buttonVariants({ variant: 'gradient', size: 'lg' }), 'w-full sm:w-auto flex items-center gap-2')}
+                  >
+                    <Users className="h-4 w-4" />
+                    View Candidate Match Leaderboard
+                    <ChevronRight className="h-4 w-4" />
                   </Link>
                 </div>
               </div>

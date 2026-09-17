@@ -4,8 +4,9 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSkillX } from '@/context/SkillXContext';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
+import { cn } from '@/lib/utils/utils';
 import { Award, UserCheck, Briefcase, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -92,18 +93,20 @@ export const Navbar: React.FC = () => {
 
           {/* Quick Action */}
           {isRecruiterRoute ? (
-            <Link href="/recruiter/jobs/new">
-              <Button variant="gradient" size="sm" className="hidden sm:flex items-center gap-1.5 text-xs">
-                <Sparkles className="h-3.5 w-3.5" />
-                New Job Match Rule
-              </Button>
+            <Link
+              href="/recruiter/jobs/new"
+              className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'hidden sm:flex items-center gap-1.5 text-xs')}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              New Job Match Rule
             </Link>
           ) : (
-            <Link href="/candidate/assess/skill-nextjs">
-              <Button variant="gradient" size="sm" className="hidden sm:flex items-center gap-1.5 text-xs">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                Take Proof Assessment
-              </Button>
+            <Link
+              href="/candidate/assess/skill-nextjs"
+              className={cn(buttonVariants({ variant: 'gradient', size: 'sm' }), 'hidden sm:flex items-center gap-1.5 text-xs')}
+            >
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              Take Proof Assessment
             </Link>
           )}
         </div>

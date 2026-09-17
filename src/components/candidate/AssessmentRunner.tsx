@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { Assessment } from '@/lib/types';
 import { useSkillX } from '@/context/SkillXContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils/utils';
 import { ShieldCheck, CheckCircle2, ArrowRight, ArrowLeft, Timer, Sparkles, Award } from 'lucide-react';
 import Link from 'next/link';
 
@@ -119,16 +120,18 @@ export const AssessmentRunner: React.FC<AssessmentRunnerProps> = ({ assessment }
         </CardContent>
 
         <CardFooter className="p-6 bg-secondary/30 flex justify-between gap-4">
-          <Link href="/candidate/dashboard">
-            <Button variant="outline" size="lg">
-              Return to Candidate Dashboard
-            </Button>
+          <Link
+            href="/candidate/dashboard"
+            className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
+          >
+            Return to Candidate Dashboard
           </Link>
-          <Link href="/recruiter/jobs/job-01-fullstack/matches">
-            <Button variant="gradient" size="lg" className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4" />
-              View Updated Recruiter Leaderboard
-            </Button>
+          <Link
+            href="/recruiter/jobs/job-01-fullstack/matches"
+            className={cn(buttonVariants({ variant: 'gradient', size: 'lg' }), 'flex items-center gap-2')}
+          >
+            <Sparkles className="h-4 w-4" />
+            View Updated Recruiter Leaderboard
           </Link>
         </CardFooter>
       </Card>
